@@ -48,6 +48,7 @@ class App(tk.Tk):
         self.columnconfigure(0, weight=1)
 
     def update_table(self):
+
         self.tree.delete(*self.tree.get_children())
         self.tree["columns"] = self.headings
         if self.editable:
@@ -63,11 +64,13 @@ class App(tk.Tk):
             self.tree.insert("", tk.END, values=d)
 
     def new_file(self):
+
         self.headings.clear()
         self.data.clear()
         self.update_table()
 
     def open_file(self):
+
         file_path = tk.filedialog.askopenfilename(filetypes=[("CSV files", "*.csv")])
         if not file_path:
             return
@@ -87,6 +90,7 @@ class App(tk.Tk):
             self.update_table()
 
     def save_file(self):
+
         file_path = filedialog.asksaveasfilename(defaultextension=".csv", filetypes=[("CSV files", "*.csv")])
         if not file_path:
             return
@@ -102,34 +106,42 @@ class App(tk.Tk):
             messagebox.showerror("Ошибка", f"Ошибка при сохранении файла:\n{e}")
 
     def add_column(self):
-        column_name = f"Column {len(self.headings) + 1}"
-        self.headings.append(column_name)
-        if self.data:
-            for row in self.data:
-                row.append("")
-        else:
-            self.add_row()
-        self.update_table()
+
+        if not self.editable:
+            column_name = f"Column {len(self.headings) + 1}"
+            self.headings.append(column_name)
+            if self.data:
+                for row in self.data:
+                    row.append("")
+            else:
+                self.add_row()
+            self.update_table()
 
     def add_row(self):
-        if self.headings:
-            self.data.append(["" for h in self.headings])
-        else:
-            self.add_column()
-        self.update_table()
+
+        if not self.editable:
+            if self.headings:
+                self.data.append(["" for h in self.headings])
+            else:
+                self.add_column()
+            self.update_table()
 
     def delete_column(self):
-        if self.headings:
-            self.headings.pop()
-            for row in self.data:
-                if row:
-                    row.pop()
-        self.update_table()
+
+        if not self.editable:
+            if self.headings:
+                self.headings.pop()
+                for row in self.data:
+                    if row:
+                        row.pop()
+            self.update_table()
 
     def delete_row(self):
-        if self.data:
-            self.data.pop()
-        self.update_table()
+
+        if not self.editable:
+            if self.data:
+                self.data.pop()
+            self.update_table()
 
     def edit_cell(self, event):
 
@@ -166,11 +178,13 @@ class App(tk.Tk):
             return
 
     def edit_contents(self):
+
         if not self.editable:
             self.data = [self.headings] + self.data
         else:
             self.headings = self.data[0]
             self.data = self.data[1:]
+
         self.editable = not self.editable
         self.update_table()
 
