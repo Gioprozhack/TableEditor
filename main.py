@@ -32,7 +32,7 @@ class App(tk.Tk):
         self.main_menu.add_cascade(label="Edit", menu=self.edit_menu)
         self.config(menu=self.main_menu)
 
-        self.title("Ttk Treeview")
+        self.title("Table Editor")
         self.geometry("600x400")
 
         self.tree = ttk.Treeview(self)
@@ -117,6 +117,8 @@ class App(tk.Tk):
             else:
                 self.add_row()
             self.update_table()
+        else:
+            messagebox.showerror("Ошибка", f"Нельзя добавить столбец в режиме изменения данных!")
 
     def add_row(self):
 
@@ -126,6 +128,8 @@ class App(tk.Tk):
             else:
                 self.add_column()
             self.update_table()
+        else:
+            messagebox.showerror("Ошибка", f"Нельзя добавить строку в режиме изменения данных!")
 
     def delete_column(self):
 
@@ -136,6 +140,8 @@ class App(tk.Tk):
                     if row:
                         row.pop()
             self.update_table()
+        else:
+            messagebox.showerror("Ошибка", f"Нельзя удалить стобец в режиме изменения данных!")
 
     def delete_row(self):
 
@@ -143,6 +149,8 @@ class App(tk.Tk):
             if self.data:
                 self.data.pop()
             self.update_table()
+        else:
+            messagebox.showerror("Ошибка", f"Нельзя удалить строку в режиме изменения данных!")
 
     def edit_cell(self, event):
 
