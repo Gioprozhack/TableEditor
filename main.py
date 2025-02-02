@@ -12,6 +12,7 @@ class App(tk.Tk):
         self.data = []
 
         self.editable = False
+        self.reverse_sort = False
 
         self.main_menu = tk.Menu()
         self.file_menu = tk.Menu(tearoff=0)
@@ -57,7 +58,7 @@ class App(tk.Tk):
             self.tree["show"] = "headings"
 
         for h in self.headings:
-            self.tree.heading(h, text=h)
+            self.tree.heading(h, text=h, command=lambda i=self.headings.index(h): self.sort_column(i))
             self.tree.column(h, width=100, anchor="center")
 
         for d in self.data:
@@ -186,6 +187,22 @@ class App(tk.Tk):
             self.data = self.data[1:]
 
         self.editable = not self.editable
+        self.update_table()
+
+    def sort_column(self, col):
+
+        sorted_data = {}
+
+        for row in self.data:
+            sorted_data[row[col]] = row
+        sorted_data = dict(sorted(sorted_data.items(), reverse=self.reverse_sort))
+
+        self.reverse_sort = not self.reverse_sort
+        self.data.clear()
+
+        for key in sorted_data.keys():
+            self.data.append(sorted_data[key])
+
         self.update_table()
 
 
